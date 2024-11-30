@@ -39,4 +39,9 @@ luac.out
 *.x86_64
 *.hex
 
+# Vim
 spell/
+
+# Vim plug
+package-lock.json
+package.json
