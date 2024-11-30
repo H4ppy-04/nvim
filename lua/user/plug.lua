@@ -17,8 +17,15 @@ Plug('nvim-telescope/telescope.nvim', {
     ['tag'] = '0.1.8'
 })
 
+Plug 'https://github.com/nvim-treesitter/nvim-treesitter'
+
 Plug('nvim-lua/plenary.nvim')
 
 Plug('vimwiki/vimwiki')
+
+Plug 'wakatime/vim-wakatime'
+Plug 'SirVer/ultisnips'
+
+Plug 'honza/vim-snippets'
 
 vim.call('plug#end')

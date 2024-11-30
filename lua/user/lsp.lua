@@ -1,21 +1,32 @@
 vim.api.nvim_create_autocmd(
     { 'LspAttach' }, {
         callback = function(event)
-            vim.bo[event.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
-            local maps = {
-                { 'n', 'gd',         function() vim.lsp.buf.definition() end,              { noremap = true, silent = true } },
-                { 'n', 'K',          function() vim.lsp.buf.hover() end,                   { noremap = true, silent = true } },
-                { 'n', '<leader>ca', function() vim.lsp.buf.code_action() end,             { noremap = true } },
-                { 'n', 'gr',         function() vim.lsp.buf.references() end,              { noremap = true } },
-                { 'n', '<leader>rn', function() vim.lsp.buf.rename() end,                  { noremap = true } },
-                { 'i', '<C-h>',      function() vim.lsp.buf.signature_help() end,          { noremap = true, silent = true } },
-                { 'n', ']d',         function() vim.diagnostic.goto_next() end,            { noremap = true } },
-                { 'n', '[d',         function() vim.diagnostic.goto_prev() end,            { noremap = true } },
-                { 'n', 'gf',         function() vim.lsp.buf.format({ async = false }) end, { noremap = true, silent = true } }
-            }
-            for _, v in pairs(maps) do
-                v[4].buffer = event.buf
-                vim.keymap.set(v[1], v[2], v[3], v[4])
+            local client = vim.lsp.get_client_by_id(event.data.client_id)
+            if client ~= nil then
+                -- Hide semantic highlights for functions
+                vim.api.nvim_set_hl(0, '@lsp.type.function', {})
+
+                if client.server_capabilities.definitionProvider then
+                    vim.bo[event.buf].tagfunc = "v:lua.vim.lsp.tagfunc"
+                end
+                if client.server_capabilities.completionProvider then
+                    vim.bo[event.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+                    local maps = {
+                        { 'n', 'gd',         function() vim.lsp.buf.definition() end,              { noremap = true, silent = true } },
+                        { 'n', 'K',          function() vim.lsp.buf.hover() end,                   { noremap = true, silent = true } },
+                        { 'n', '<leader>ca', function() vim.lsp.buf.code_action() end,             { noremap = true } },
+                        { 'n', 'gr',         function() vim.lsp.buf.references() end,              { noremap = true } },
+                        { 'n', '<leader>rn', function() vim.lsp.buf.rename() end,                  { noremap = true } },
+                        { 'i', '<C-h>',      function() vim.lsp.buf.signature_help() end,          { noremap = true, silent = true } },
+                        { 'n', ']d',         function() vim.diagnostic.goto_next() end,            { noremap = true } },
+                        { 'n', '[d',         function() vim.diagnostic.goto_prev() end,            { noremap = true } },
+                        { 'n', 'gf',         function() vim.lsp.buf.format({ async = false }) end, { noremap = true, silent = true } }
+                    }
+                    for _, v in pairs(maps) do
+                        v[4].buffer = event.buf
+                        vim.keymap.set(v[1], v[2], v[3], v[4])
+                    end
+                end
             end
         end,
         desc = 'Language server protocol keyboard mappings',
@@ -129,8 +140,7 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = { "*.rs", "*.lua", "*.c", "*.h", "*.py" },
     callback = function()
-        local client_id = 1
-        if vim.lsp.buf_is_attached(vim.api.nvim_get_current_buf(), client_id) then
+        if vim.lsp.buf_is_attached(0, 1) then
             vim.lsp.buf.format()
         end
     end,
