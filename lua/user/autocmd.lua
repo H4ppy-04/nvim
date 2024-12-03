@@ -17,18 +17,27 @@ vim.api.nvim_create_autocmd({ "OptionSet", "ColorScheme" }, {
     callback = function(event)
         if vim.g.colors_name == "vim" and event.event == "OptionSet" then
             if event.option_new == "light" then
-                vim.api.nvim_set_hl(0, 'Normal', { fg = 'black', bg = 'white' })
+                -- vim.api.nvim_set_hl(0, 'Normal', { fg = 'black', bg = 'white' })
             end
         end
         if vim.g.colors_name == "vim" and vim.o.background == "dark" then
-            vim.api.nvim_set_hl(0, 'Pmenu', { fg = 'white', bg = 'black' })
+            -- vim.api.nvim_set_hl(0, 'Pmenu', { fg = 'white', bg = 'black' })
         end
     end
 })
 
 vim.api.nvim_create_autocmd("VimEnter", {
     callback = function(_)
-        vim.cmd.colorscheme "vim"
+        local lxterm = vim.system({'pidof', 'lxterminal'}, { text = true }):wait()
+        local gnome = vim.system({'pidof', 'gnome-terminal-server', 'gnome-terminal'}, { text = true }):wait()
+
+        vim.o.termguicolors = false
+
+        if lxterm.code == 0 then
+            vim.cmd.colorscheme "vim"
+            vim.o.termguicolors = true
+        elseif gnome.code == 0 then
+            vim.cmd.colorscheme "default"
+        end
     end,
-    desc = 'Set vim colorscheme when vim is loaded'
 })

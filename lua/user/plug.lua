@@ -28,4 +28,10 @@ Plug 'SirVer/ultisnips'
 
 Plug 'honza/vim-snippets'
 
+Plug 'neovim/nvim-lspconfig'
+
+
+-- format haskell files on write
+Plug 'https://github.com/alx741/vim-hindent'
+
 vim.call('plug#end')

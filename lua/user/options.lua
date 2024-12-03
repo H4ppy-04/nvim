@@ -51,3 +51,4 @@ end
 
 -- determines what is or isn't a valid file name
 vim.opt.isfname:append('@-@')
+

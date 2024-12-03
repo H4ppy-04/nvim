@@ -3,9 +3,6 @@ vim.api.nvim_create_autocmd(
         callback = function(event)
             local client = vim.lsp.get_client_by_id(event.data.client_id)
             if client ~= nil then
-                -- Hide semantic highlights for functions
-                vim.api.nvim_set_hl(0, '@lsp.type.function', {})
-
                 if client.server_capabilities.definitionProvider then
                     vim.bo[event.buf].tagfunc = "v:lua.vim.lsp.tagfunc"
                 end
@@ -39,11 +36,7 @@ vim.api.nvim_create_autocmd("FileType", {
         local client = vim.lsp.start({
             name = 'rust-analyzer',
             cmd = { '/home/doctor/.cargo/bin/rust-analyzer' },
-            root_dir = vim.fs.find({
-                'Cargo.toml',
-                'Cargo.lock',
-                '.git',
-            }, { upward = true })[1]
+            root_dir = vim.fs.find({ 'Cargo.toml', 'Cargo.lock', '.git', }, { upward = true })[1]
         })
         if client ~= nil then
             vim.lsp.buf_attach_client(0, client)
@@ -58,17 +51,13 @@ vim.api.nvim_create_autocmd("FileType", {
         local client = vim.lsp.start({
             name = 'gopls',
             cmd = { 'gopls' },
-            root_dir = vim.fs.find({
-                'go.mod',
-                'go.work',
-                '.git',
-            }, { upward = true })[1]
+            root_dir = vim.fs.find({ 'go.mod', 'go.work', '.git', }, { upward = true })[1]
         })
         if client ~= nil then
             vim.lsp.buf_attach_client(0, client)
         end
     end,
-    desc = "Enable go LSP for python files"
+    desc = "Enable LSP for go files"
 })
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -77,12 +66,7 @@ vim.api.nvim_create_autocmd("FileType", {
         local client = vim.lsp.start({
             name = 'pyright',
             cmd = { 'pyright' },
-            root_dir = vim.fs.find({
-                'pyproject.toml',
-                'setup.py',
-                '.git',
-                'src'
-            }, { upward = true })[1]
+            root_dir = vim.fs.find({ 'pyproject.toml', 'setup.py', '.git', 'src' }, { upward = true })[1]
         })
         if client ~= nil then
             vim.lsp.buf_attach_client(0, client)
@@ -97,11 +81,7 @@ vim.api.nvim_create_autocmd("FileType", {
         local client = vim.lsp.start({
             name = 'clangd',
             cmd = { 'clangd' },
-            root_dir = vim.fs.find({
-                'Makefile',
-                '.clang-format',
-                '.git',
-            }, { upward = true })[1]
+            root_dir = vim.fs.find({ 'Makefile', '.clang-format', '.git', }, { upward = true })[1]
         })
         if client ~= nil then
             vim.lsp.buf_attach_client(0, client)
@@ -125,10 +105,7 @@ vim.api.nvim_create_autocmd("FileType", {
                     },
                 }
             },
-            root_dir = vim.fs.find(
-                { 'init.lua', '.git', 'style.lua' },
-                { upward = true }
-            )[1]
+            root_dir = vim.fs.find( { 'init.lua', '.git', 'style.lua' }, { upward = true })[1]
         })
         if client ~= nil then
             vim.lsp.buf_attach_client(0, client)
