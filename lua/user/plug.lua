@@ -24,12 +24,20 @@ Plug('nvim-lua/plenary.nvim')
 Plug('vimwiki/vimwiki')
 
 Plug 'wakatime/vim-wakatime'
+
+Plug 'junegunn/vader.vim'
+
 Plug 'SirVer/ultisnips'
 
+-- Snippets & Co.
+Plug 'ckunte/latex-snippets-vim'
+Plug 'lervag/vimtex'
 Plug 'honza/vim-snippets'
 
+-- lsp stuff
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
-
 
 -- format haskell files on write
 Plug 'https://github.com/alx741/vim-hindent'
